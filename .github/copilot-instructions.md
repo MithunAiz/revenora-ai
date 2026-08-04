@@ -1,0 +1,5 @@
+- Revenora AI is a frontend-only React + TypeScript + Vite app.
+- Use mocked services and local data; do not add backend logic.
+- Preserve the enterprise healthcare dashboard visual language.
+- Keep the architecture modular and backend-ready.
+- Prefer small, focused edits that preserve existing patterns.
