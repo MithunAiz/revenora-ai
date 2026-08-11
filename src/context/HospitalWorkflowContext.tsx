@@ -19,6 +19,7 @@ import {
   validationPipeline,
   validationIssues as validationIssuesSeed,
 } from '../constants/mockData';
+import { fetchClaimsFromBackend, submitClaimApi, resubmitClaimApi } from '../services/claimsApi';
 
 type ClaimScenario = 'missingDocumentation' | 'duplicateBilling' | 'codingMismatch' | 'coverageIssue' | 'perfect';
 
@@ -192,6 +193,18 @@ export function HospitalWorkflowProvider({ children }: PropsWithChildren) {
   const [activityFeed, setActivityFeed] = useState<ClaimActivityEntry[]>(() => claimsSeed.flatMap((claim) => claim.activity).slice(0, 12));
   const [generatedDemoCount, setGeneratedDemoCount] = useState(0);
 
+  useEffect(() => {
+    fetchClaimsFromBackend()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setClaims(data);
+        }
+      })
+      .catch(() => {
+        // Fallback to initial seed if backend is offline
+      });
+  }, []);
+
   const metrics = useMemo(() => buildMetricSummary(claims), [claims]);
   const analyticsSummary = useMemo(() => buildAnalytics(claims, metrics), [claims, metrics]);
 
@@ -343,18 +356,35 @@ export function HospitalWorkflowProvider({ children }: PropsWithChildren) {
       aiReviewStatus: 'Approved',
       claimHealth: Math.max(claim.claimHealth, 92),
       denialRisk: Math.min(claim.denialRisk, 8),
-    }, 'Ready for Submission'), 'System', 'Claim marked ready', 'Claim is ready for submission to the clearinghouse.'));
+    }, 'Ready for Submission'), 'System', 'Claim marked ready', 'Claim is ready for submission to insurance.'));
     pushNotification({ title: 'Claim ready', message: `${claimId} is ready for submission.`, timestamp: timeStamp(), tone: 'success', claimId });
   };
 
-  const submitClaim = (claimId: string) => {
+  const submitClaim = async (claimId: string) => {
+    try {
+      const result = await submitClaimApi(claimId);
+      if (result.success && result.claim) {
+        setClaims((current) => current.map((c) => (c.claimId === claimId ? result.claim : c)));
+        pushNotification({
+          title: `Claim ${result.claim.status}`,
+          message: `${claimId} status updated to ${result.claim.status}.`,
+          timestamp: timeStamp(),
+          tone: result.claim.status === 'Approved' || result.claim.status === 'Paid' ? 'success' : result.claim.status === 'Rejected' ? 'critical' : 'info',
+          claimId,
+        });
+        return;
+      }
+    } catch {
+      // Fallback local update if backend fails
+    }
+
     updateClaim(claimId, (claim) => addActivity(updateTimeline({
       ...claim,
       status: 'Submitted',
       submissionStatus: 'Submitted',
       currentStage: 'Submitted',
-    }, 'Submitted'), 'System', 'Claim submitted', 'Clearinghouse submission packet sent.'));
-    pushNotification({ title: 'Claim submitted', message: `${claimId} was submitted to the clearinghouse.`, timestamp: timeStamp(), tone: 'success', claimId });
+    }, 'Submitted'), 'System', 'Claim submitted', 'Insurance submission packet sent.'));
+    pushNotification({ title: 'Claim submitted', message: `${claimId} was submitted for insurance review.`, timestamp: timeStamp(), tone: 'success', claimId });
   };
 
   const toggleDemoMode = (enabled?: boolean) => setDemoMode((current) => ({ ...current, enabled: enabled ?? !current.enabled, running: enabled ?? !current.enabled }));

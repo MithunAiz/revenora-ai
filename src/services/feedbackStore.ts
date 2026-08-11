@@ -46,6 +46,8 @@ const writeFeedback = (entries: PatientFeedback[]) => {
 
 export const getPatientFeedback = () => readFeedback();
 
+import { saveFeedbackToBackend } from './claimsApi';
+
 export const submitPatientFeedback = (
   feedback: Omit<PatientFeedback, 'id' | 'createdAt'>,
 ): PatientFeedback => {
@@ -58,6 +60,9 @@ export const submitPatientFeedback = (
   const existing = readFeedback();
   const next = [entry, ...existing].slice(0, 50);
   writeFeedback(next);
+
+  saveFeedbackToBackend(entry).catch(() => {});
+
   return entry;
 };
 

@@ -35,7 +35,7 @@ export function AIReviewerPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight text-slate-950">AI Claim Reviewer</h1>
-        <p className="mt-2 text-slate-500">Groq-powered review for one claim at a time, with no automatic generation or background AI usage.</p>
+        <p className="mt-2 text-slate-500">AI-powered review for one claim at a time, with no automatic generation or background AI usage.</p>
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -53,7 +53,7 @@ export function AIReviewerPage() {
           </select>
           <button onClick={handleGroqReview} disabled={isReviewing} className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60">
             {isReviewing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-            {isReviewing ? 'Running Groq Review' : 'Run Groq Review'}
+            {isReviewing ? 'Running AI Review' : 'Run AI Review'}
           </button>
         </div>
         <p className="mt-4 text-xs text-slate-400">Uses a single API call only when you click the button.</p>
@@ -81,7 +81,7 @@ export function AIReviewerPage() {
         <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <div className="section-title">Groq Review Summary</div>
+              <div className="section-title">AI Review Summary</div>
               <div className="section-subtitle">Applied to the selected claim after the API response returned.</div>
             </div>
             <ShieldAlert className="h-5 w-5 text-slate-400" />

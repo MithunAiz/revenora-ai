@@ -1,39 +1,44 @@
-import { ArrowRight, CheckCircle2, ChevronRight, ShieldCheck, Sparkles, Stethoscope, TrendingUp, Users, Workflow } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ChevronRight, ShieldCheck, Sparkles, Stethoscope, TrendingUp, Users, Workflow, AlertTriangle, RotateCcw, FileText, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const stats = [
-  { value: '94.8%', label: 'Approval lift' },
+  { value: '94.8%', label: 'First-pass approval rate' },
   { value: '31%', label: 'Denial reduction' },
-  { value: '4.2m', label: 'Average review time' },
-  { value: '$1.24M', label: 'Revenue protected' },
+  { value: 'Real-Time', label: 'Insurance Adjudication' },
+  { value: '₹1.24Cr', label: 'Revenue protected' },
 ];
 
 const capabilities = [
   {
-    title: 'Pre-submission claim review',
-    desc: 'Catch documentation gaps, coding mismatches, and coverage problems before a claim leaves the hospital.',
+    title: 'Pre-submission AI validation',
+    desc: 'Catch documentation gaps, ICD/CPT coding mismatches, and coverage issues before a claim leaves the hospital.',
   },
   {
-    title: 'Explainable AI findings',
-    desc: 'Every issue includes evidence, why it matters, and the recommended fix so teams can act quickly.',
+    title: 'Instant insurance adjudication',
+    desc: 'Automated claim transmission and adjudication across Indian payers (Star Health, HDFC ERGO, ICICI Lombard, Niva Bupa, Ayushman Bharat PM-JAY).',
   },
   {
-    title: 'Real workflow synchronization',
-    desc: 'Changes in the claim workspace update dashboards, alerts, timelines, and review queues instantly.',
+    title: 'AI denial intelligence',
+    desc: 'Extract root causes, chart evidence, and recommended fixes for rejected claims to enable one-click AI resubmission.',
   },
   {
-    title: 'Demo-ready operations mode',
-    desc: 'A presentation mode keeps the platform moving like a live hospital without manual triggering.',
+    title: 'Reimbursement & cashless settlement',
+    desc: 'Track approved payer coverage (₹), patient co-pay responsibility, and cashless settlement status in real-time.',
   },
 ];
 
 const workflowSteps = [
-  { title: 'Clinical documentation', detail: 'Capture the story of care in a structured review workspace.' },
-  { title: 'AI validation', detail: 'Compare notes, codes, billing, and payer rules in one pass.' },
-  { title: 'Corrections and resubmission', detail: 'Apply fixes, revalidate, and move the claim toward clean submission.' },
+  { title: '1. Clinical Chart Pre-Validation', detail: 'Capture doctor notes, oper summaries, and medical codes in a centralized review workspace.' },
+  { title: '2. Claim Submission to Insurance', detail: 'Transmit claim packets directly to insurance payers with automated pre-submission compliance verification.' },
+  { title: '3. Real-Time Adjudication & Settlement', detail: 'Receive instant approved settlement amounts in ₹ or AI denial intelligence for automatic resubmission.' },
 ];
 
-const trustPoints = ['HIPAA-aware workflow patterns', 'Audit-friendly activity logs', 'Hospital-grade role separation', 'Mock backend ready for real API integration'];
+const trustPoints = [
+  'Indian Healthcare Policy Compliant',
+  'Audit-Friendly Lifecycle Stream',
+  'Role-Based Staff & Patient Portals',
+  'Native SQLite & API Backend Integration',
+];
 
 export function LandingPage() {
   return (
@@ -45,23 +50,22 @@ export function LandingPage() {
               <Stethoscope className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-lg font-semibold tracking-tight">Revenora AI</div>
-              <div className="text-xs text-slate-500">AI-Powered Clinical-to-Claim Validation</div>
+              <div className="text-lg font-bold tracking-tight">Revenora AI</div>
+              <div className="text-xs font-semibold text-slate-500">Clinical-to-Claim Revenue Intelligence</div>
             </div>
           </div>
-          <nav className="hidden items-center gap-6 text-sm text-slate-600 lg:flex">
+          <nav className="hidden items-center gap-6 text-sm font-semibold text-slate-600 lg:flex">
             <a href="#capabilities" className="transition hover:text-slate-950">Platform</a>
             <a href="#workflow" className="transition hover:text-slate-950">Workflow</a>
             <a href="#security" className="transition hover:text-slate-950">Security</a>
-            <a href="#contact" className="transition hover:text-slate-950">Contact</a>
           </nav>
           <div className="flex items-center gap-3">
-            <Link to="/login" className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300">
+            <Link to="/login" className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-700 transition hover:border-slate-300">
               Sign in
             </Link>
-            <a href="#contact" className="rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90">
-              Request demo
-            </a>
+            <Link to="/login" className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-md transition hover:bg-slate-800">
+              Open Hospital Workspace
+            </Link>
           </div>
         </div>
       </header>
@@ -71,27 +75,27 @@ export function LandingPage() {
           <div className="absolute inset-x-0 top-0 -z-10 h-[540px] bg-[radial-gradient(circle_at_top_left,_rgba(91,200,245,0.18),_transparent_32%),radial-gradient(circle_at_top_right,_rgba(31,157,114,0.14),_transparent_24%),linear-gradient(180deg,_#f8fafc_0%,_#f8fafc_45%,_#eef6fb_100%)]" />
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
-                <Sparkles className="h-4 w-4" /> Enterprise healthcare workflow
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.28em] text-cyan-800">
+                <Sparkles className="h-4 w-4" /> End-to-End Revenue Cycle Intelligence
               </div>
-              <h1 className="max-w-3xl text-5xl font-semibold tracking-tight text-slate-950 md:text-6xl lg:text-7xl">
-                Catch denials before submission with a claim quality layer built for hospitals.
+              <h1 className="max-w-3xl text-5xl font-extrabold tracking-tight text-slate-950 md:text-6xl lg:text-7xl">
+                Validate, Submit, Adjudicate & Reimburse Claims with AI.
               </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-                Revenora AI sits between claim generation and the clearinghouse, reviewing documentation, coding, billing, and payer rules so teams can ship cleaner claims with confidence.
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 font-medium">
+                Revenora AI acts as an intelligent pre-submission validation layer for hospitals—verifying clinical documentation, ICD/CPT coding, and Indian insurance rules before claims are submitted, driving automatic adjudication, AI denial resolution, and cashless reimbursement.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link to="/login" className="inline-flex items-center gap-2 rounded-full bg-medical-blue px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5">
-                  Sign in to the platform <ArrowRight className="h-4 w-4" />
+                <Link to="/login" className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition hover:bg-slate-800">
+                  Launch Portal Workspace <ArrowRight className="h-4 w-4" />
                 </Link>
-                <a href="#workflow" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300">
-                  See workflow <ChevronRight className="h-4 w-4" />
+                <a href="#workflow" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3.5 text-sm font-bold text-slate-700 shadow-sm transition hover:border-slate-300">
+                  Explore Workflow <ChevronRight className="h-4 w-4" />
                 </a>
               </div>
 
               <div className="mt-10 grid gap-3 sm:grid-cols-2">
                 {trustPoints.map((item) => (
-                  <div key={item} className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
+                  <div key={item} className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-700 shadow-sm">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     {item}
                   </div>
@@ -99,48 +103,43 @@ export function LandingPage() {
               </div>
             </div>
 
+            {/* Visual Workflow Preview Card */}
             <div className="relative">
-              <div className="absolute -left-8 top-8 h-28 w-28 rounded-full bg-cyan-200/50 blur-3xl animate-pulseGlow" />
-              <div className="absolute bottom-8 right-6 h-32 w-32 rounded-full bg-emerald-200/50 blur-3xl animate-pulseGlow" />
-              <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-premium lg:p-8">
-                <div className="flex items-center justify-between rounded-2xl bg-slate-50 p-4">
+              <div className="rounded-[2rem] border-2 border-slate-200 bg-white p-6 shadow-xl lg:p-8 space-y-5">
+                <div className="flex items-center justify-between rounded-2xl bg-slate-900 p-4 text-white">
                   <div>
-                    <div className="text-xs uppercase tracking-[0.24em] text-slate-400">Claim Review Workspace</div>
-                    <div className="mt-1 text-xl font-semibold text-slate-950">Live review, explain, correct, submit</div>
+                    <div className="text-xs uppercase tracking-[0.24em] text-slate-300">Claim Review Workspace</div>
+                    <div className="mt-1 text-lg font-extrabold">End-to-End Adjudication Lifecycle</div>
                   </div>
-                  <div className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">AI active</div>
+                  <div className="rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-white">Live AI</div>
                 </div>
 
-                <div className="mt-6 space-y-4">
-                  {[
-                    ['Claim health', '89', 'good'],
-                    ['Documentation score', '84', 'warning'],
-                    ['Coverage validation', 'Passed', 'good'],
-                  ].map(([label, value, tone]) => (
-                    <div key={label as string} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-slate-500">{label as string}</span>
-                        <span className={`font-semibold ${tone === 'good' ? 'text-emerald-700' : 'text-amber-700'}`}>{value as string}</span>
-                      </div>
-                      <div className="mt-3 h-2 rounded-full bg-slate-200">
-                        <div className={`h-2 rounded-full ${tone === 'good' ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: tone === 'good' ? '89%' : '84%' }} />
-                      </div>
+                <div className="space-y-3">
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-bold text-emerald-900 flex justify-between items-center">
+                    <span>Approved Payer Reimbursement:</span>
+                    <span className="text-sm font-extrabold text-emerald-700">₹3,40,000</span>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-xs space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-bold">Insurance Payer:</span>
+                      <span className="font-extrabold text-slate-900">Niva Bupa / Star Health</span>
                     </div>
-                  ))}
+                    <div className="flex justify-between">
+                      <span className="text-slate-500 font-bold">Claim Health Score:</span>
+                      <span className="font-extrabold text-emerald-600">96%</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  {[
-                    ['Review queue', '24 claims'],
-                    ['Claims saved', '64 this month'],
-                    ['Revenue protected', '$1.24M'],
-                    ['Avg review time', '4.2m'],
-                  ].map(([label, value]) => (
-                    <div key={label as string} className="rounded-2xl bg-slate-900 p-4 text-white">
-                      <div className="text-xs uppercase tracking-[0.2em] text-slate-300">{label as string}</div>
-                      <div className="mt-2 text-xl font-semibold">{value as string}</div>
-                    </div>
-                  ))}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-slate-100 p-4 text-slate-900">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Claims</div>
+                    <div className="mt-1 text-xl font-extrabold">25 Indian Records</div>
+                  </div>
+                  <div className="rounded-2xl bg-slate-900 p-4 text-white">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-300">Protected Value</div>
+                    <div className="mt-1 text-xl font-extrabold">₹1.24 Crore</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -150,9 +149,9 @@ export function LandingPage() {
         <section className="mx-auto max-w-7xl px-4 pb-20 lg:px-8">
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {stats.map((item) => (
-              <div key={item.label} className="metric-card">
-                <div className="text-3xl font-semibold tracking-tight">{item.value}</div>
-                <div className="mt-2 text-sm text-slate-500">{item.label}</div>
+              <div key={item.label} className="metric-card border border-slate-200">
+                <div className="text-3xl font-extrabold tracking-tight text-slate-950">{item.value}</div>
+                <div className="mt-1 text-xs font-bold uppercase tracking-wider text-slate-500">{item.label}</div>
               </div>
             ))}
           </div>
@@ -160,110 +159,52 @@ export function LandingPage() {
 
         <section id="capabilities" className="mx-auto max-w-7xl px-4 pb-20 lg:px-8">
           <div className="mb-8 max-w-2xl">
-            <div className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-700">Platform</div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Everything the revenue cycle team needs in one connected experience</h2>
-            <p className="mt-3 text-slate-500">The product is built to feel like a real enterprise system, with the review workspace at the center and every dashboard reflecting the same operational state.</p>
+            <div className="text-xs font-bold uppercase tracking-[0.28em] text-cyan-700">Platform Capabilities</div>
+            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Complete Revenue Cycle Intelligence Platform</h2>
+            <p className="mt-2 text-sm font-medium text-slate-500">Built specifically for hospital billing teams, medical coders, and patient transparency.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {capabilities.map((item, index) => (
-              <div key={item.title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-white">0{index + 1}</div>
-                <div className="mt-5 text-xl font-semibold text-slate-950">{item.title}</div>
-                <p className="mt-3 text-sm leading-7 text-slate-500">{item.desc}</p>
+              <div key={item.title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 font-bold text-white text-xs">0{index + 1}</div>
+                <div className="text-lg font-bold text-slate-950">{item.title}</div>
+                <p className="text-xs leading-6 font-medium text-slate-500">{item.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section id="workflow" className="mx-auto max-w-7xl px-4 pb-20 lg:px-8">
-          <div className="grid gap-6 xl:grid-cols-[1fr_1.05fr]">
-            <div className="rounded-[2rem] border border-slate-200 bg-slate-900 p-8 text-white shadow-premium">
-              <div className="flex items-center gap-3 text-sm text-slate-300">
-                <Workflow className="h-5 w-5 text-cyan-300" /> Operational flow
-              </div>
-              <h3 className="mt-4 text-3xl font-semibold tracking-tight">A clean path from chart to submission</h3>
-              <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300">Review the clinical story, inspect the AI findings, apply fixes, and push the claim toward ready-to-submit status without leaving the workspace.</p>
-              <div className="mt-8 space-y-3">
-                {workflowSteps.map((step, index) => (
-                  <div key={step.title} className="flex items-start gap-4 rounded-2xl bg-white/8 p-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white text-slate-900">0{index + 1}</div>
-                    <div>
-                      <div className="font-semibold">{step.title}</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-300">{step.detail}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          <div className="rounded-[2rem] border border-slate-200 bg-slate-900 p-8 text-white shadow-xl">
+            <div className="flex items-center gap-3 text-xs font-bold text-cyan-300 uppercase tracking-wider">
+              <Workflow className="h-5 w-5" /> End-to-End Operational Lifecycle
             </div>
-
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-premium">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-700">Security</div>
-                  <h3 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Enterprise-grade controls for hospital operations</h3>
+            <h3 className="mt-3 text-3xl font-extrabold tracking-tight">From Patient Chart to Cashless Reimbursement</h3>
+            <p className="mt-2 max-w-2xl text-sm font-medium text-slate-300">Validate clinical charts, transmit packets to insurance payers, trigger instant adjudication, and manage AI denial corrections seamlessly.</p>
+            <div className="mt-8 space-y-4">
+              {workflowSteps.map((step) => (
+                <div key={step.title} className="flex items-start gap-4 rounded-2xl bg-white/10 p-5">
+                  <CheckCircle className="h-6 w-6 text-emerald-400 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-bold text-white text-base">{step.title}</div>
+                    <div className="mt-1 text-xs text-slate-300 font-medium leading-relaxed">{step.detail}</div>
+                  </div>
                 </div>
-                <ShieldCheck className="h-10 w-10 text-emerald-600" />
-              </div>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {[
-                  ['Role separation', 'Each portal only exposes the tools that role should access.'],
-                  ['Audit trail', 'User actions, claim corrections, and AI recommendations are tracked.'],
-                  ['Mock backend', 'Local service layers simulate APIs and persist demo feedback.'],
-                  ['Future-ready', 'The structure is ready for a real backend or AI service later.'],
-                ].map(([title, desc]) => (
-                  <div key={title} className="rounded-2xl bg-slate-50 p-5">
-                    <div className="font-semibold text-slate-950">{title}</div>
-                    <p className="mt-2 text-sm leading-6 text-slate-500">{desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6 rounded-2xl bg-slate-50 p-5">
-                <div className="text-sm font-semibold text-slate-900">Recommended next step</div>
-                <p className="mt-2 text-sm leading-6 text-slate-500">Sign in to the portal that matches your role, then open a claim and walk the workflow end to end.</p>
-                <Link to="/login" className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white">
-                  Go to sign in <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="security" className="mx-auto max-w-7xl px-4 pb-20 lg:px-8">
-          <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
-            <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-              <div>
-                <div className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-700">Why teams use it</div>
-                <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">Built for hospitals, not for a chatbot demo</h2>
-                <p className="mt-3 max-w-2xl text-slate-500">The public site sells the workflow honestly, the login experience is role-specific, and the claim workspace keeps the platform grounded in real operational behavior.</p>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {[
-                  ['Users', 'Billing, patient, and admin teams sign in separately.'],
-                  ['Data', 'Mocked claim data behaves like a live production system.'],
-                  ['Actions', 'Every click updates a downstream state.'],
-                  ['Demo mode', 'Presentation mode can drive the whole workflow.'],
-                ].map(([label, desc]) => (
-                  <div key={label} className="rounded-2xl bg-slate-50 p-4">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Users className="h-4 w-4 text-medical-blue" />{label}</div>
-                    <p className="mt-2 text-sm leading-6 text-slate-500">{desc}</p>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
         <section id="contact" className="mx-auto max-w-7xl px-4 pb-24 lg:px-8">
-          <div className="rounded-[2rem] bg-slate-900 px-8 py-10 text-white shadow-premium lg:px-10 lg:py-12">
+          <div className="rounded-[2rem] bg-slate-900 px-8 py-10 text-white shadow-xl lg:px-10 lg:py-12">
             <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
-                <div className="text-sm font-semibold uppercase tracking-[0.28em] text-slate-300">Get started</div>
-                <h2 className="mt-3 text-3xl font-semibold tracking-tight">Ready to review claims like a real hospital team?</h2>
-                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">Use the role-specific login page to enter the billing, patient, or administrator experience and walk through the full validation workflow.</p>
+                <div className="text-xs font-bold uppercase tracking-[0.28em] text-slate-300">Get Started</div>
+                <h2 className="mt-2 text-3xl font-extrabold tracking-tight">Experience Revenora AI Platform Live</h2>
+                <p className="mt-2 max-w-2xl text-xs font-medium text-slate-300">Sign in to the patient, billing staff, or administrator portal to explore the validation workflow.</p>
               </div>
-              <Link to="/login" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:opacity-90">
-                Open login <ArrowRight className="h-4 w-4" />
+              <Link to="/login" className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-slate-900 shadow-lg transition hover:bg-slate-100">
+                Open Login Portals <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>

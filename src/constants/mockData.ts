@@ -347,9 +347,9 @@ export const notifications: NotificationItem[] = [
 export const validationIssues: ValidationIssue[] = createValidationIssues('missingDocumentation');
 
 export const demoModeState: DemoModeState = {
-  enabled: true,
+  enabled: false,
   speed: 'Presentation',
-  running: true,
+  running: false,
   eventsGenerated: 24,
   claimsProcessed: 87,
   claimsApproved: 61,

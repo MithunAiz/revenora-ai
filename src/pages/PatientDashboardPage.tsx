@@ -1,54 +1,186 @@
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { ShieldCheck, Clock, CheckCircle2, AlertTriangle, User, FileText, Bell, Sparkles } from 'lucide-react';
 import { useHospitalWorkflow } from '../context/HospitalWorkflowContext';
+
+const PATIENT_STAGES = [
+  { key: 'Draft', label: '1. Claim Filed' },
+  { key: 'AI Validation Started', label: '2. Hospital Verification' },
+  { key: 'Ready for Submission', label: '3. Pre-Auth Prepared' },
+  { key: 'Submitted', label: '4. Sent to Insurance' },
+  { key: 'Under Insurance Review', label: '5. Payer Review' },
+  { key: 'Approved', label: '6. Approved & Settled' },
+];
 
 export function PatientDashboardPage() {
   const { claims } = useHospitalWorkflow();
-  const claim = claims[0];
-  const patientStatus = claim.submissionStatus === 'Approved'
-    ? 'Your claim has been approved.'
-    : claim.submissionStatus === 'Rejected'
-      ? 'Your claim needs attention before it can move forward.'
-      : claim.submissionStatus === 'Ready for Submission'
-        ? 'Your care team is preparing the claim for submission.'
-        : 'Your claim is being reviewed by the billing team.';
+  
+  // Patient Credentials / Account Selection
+  const [selectedClaimId, setSelectedClaimId] = useState<string>(claims[0]?.claimId || 'CLM-24084');
+
+  const claim = useMemo(() => {
+    return claims.find((c) => c.claimId === selectedClaimId) || claims[0];
+  }, [claims, selectedClaimId]);
+
+  if (!claim) return null;
+
+  const isApproved = claim.status === 'Approved' || claim.status === 'Paid' || claim.submissionStatus === 'Approved' || claim.submissionStatus === 'Paid' || claim.stage === 'Paid';
+  const isRejected = claim.status === 'Rejected' || claim.submissionStatus === 'Rejected';
+
+  const getPatientStepIndex = () => {
+    if (isApproved) return 5;
+    if (isRejected) return 4;
+    if (claim.status === 'Under Insurance Review' || claim.submissionStatus === 'Under Insurance Review') return 4;
+    if (claim.status === 'Submitted' || claim.submissionStatus === 'Submitted') return 3;
+    if (claim.status === 'Ready to Submit' || claim.submissionStatus === 'Ready for Submission') return 2;
+    return 1;
+  };
+
+  const activeStepIdx = getPatientStepIndex();
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-950">Patient Portal</h1>
-        <p className="mt-2 text-slate-500">Check your claim progress, any documents needed, and your payment summary in simple language.</p>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {['Submitted', 'Being Reviewed', 'Ready to Submit', 'Approved', 'Paid'].map((step, index) => (
-          <div key={step} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-            <div className="text-xs uppercase tracking-[0.24em] text-slate-400">Step {index + 1}</div>
-            <div className="mt-2 text-lg font-semibold">{step}</div>
+      {/* Header Bar with Patient Credential Selection */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-950">Patient Care & Claim Portal</h1>
+          <p className="mt-1 text-slate-500">Track your hospital claim status, cashless insurance approval, and payment summaries in plain language.</p>
+        </div>
+
+        {/* Patient Switcher */}
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-2.5 shadow-sm">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white font-bold text-xs">
+            <User className="h-4 w-4" />
           </div>
-        ))}
+          <div>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Logged-in Patient Account</div>
+            <select
+              value={selectedClaimId}
+              onChange={(e) => setSelectedClaimId(e.target.value)}
+              className="bg-transparent font-bold text-sm text-slate-900 outline-none cursor-pointer"
+            >
+              {claims.map((item) => (
+                <option key={item.claimId} value={item.claimId}>
+                  {item.patient} ({item.claimId} - {item.insurance})
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="section-title">Claim Status</div>
-          <div className="mt-5 space-y-3 text-sm text-slate-600">
-            <p><span className="font-semibold text-slate-900">Claim number:</span> {claim.claimId}</p>
-            <p><span className="font-semibold text-slate-900">Current update:</span> {patientStatus}</p>
-            <p><span className="font-semibold text-slate-900">Expected update by:</span> {claim.expectedCompletion}</p>
-            <p>We are checking the hospital records, the bill, and your insurance coverage before anything is sent out.</p>
-            <div className="mt-4 rounded-2xl bg-slate-50 p-4">
-              <div className="text-xs uppercase tracking-[0.24em] text-slate-400">If we need anything from you</div>
-              <div className="mt-2">We’ll ask for a discharge summary, insurance approval, or a signature only if it is required.</div>
+      {/* LIVE APPROVAL / STATUS NOTIFICATION BANNER */}
+      {isApproved ? (
+        <div className="rounded-3xl border-2 border-emerald-300 bg-gradient-to-r from-emerald-50 via-white to-emerald-50 p-6 shadow-md">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md">
+                <Bell className="h-6 w-6 animate-bounce" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-extrabold text-emerald-950">🎉 Claim Approved & Settled!</span>
+                  <span className="rounded-full bg-emerald-600 px-3 py-0.5 text-xs font-bold text-white">Live Notification</span>
+                </div>
+                <p className="mt-1 text-sm font-medium text-emerald-900">
+                  Great news, <span className="font-bold">{claim.patient}</span>! Your cashless insurance claim <span className="font-bold">{claim.claimId}</span> (₹{Number(claim.billing?.insuranceCoverage || claim.amount * 0.9).toLocaleString()}) has been fully approved by <span className="font-bold">{claim.insurance}</span>.
+                </p>
+              </div>
+            </div>
+            <div className="rounded-2xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm">
+              ₹0 Upfront Out-of-Pocket
             </div>
           </div>
         </div>
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="section-title">Payment Summary</div>
-          <div className="mt-5 space-y-3 text-sm text-slate-600">
-            <p><span className="font-semibold text-slate-900">Total hospital charges:</span> ${claim.billing.grandTotal.toLocaleString()}</p>
-            <p><span className="font-semibold text-slate-900">What insurance may cover:</span> ${claim.billing.insuranceCoverage.toLocaleString()}</p>
-            <p><span className="font-semibold text-slate-900">Estimated amount for you:</span> ${claim.billing.patientResponsibility.toLocaleString()}</p>
-            <p><span className="font-semibold text-slate-900">Need help?</span> Contact the care team if you want a status explanation.</p>
-            <Link to="/patient/feedback" className="mt-4 inline-flex rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white">Share Feedback</Link>
+      ) : isRejected ? (
+        <div className="rounded-3xl border-2 border-amber-300 bg-amber-50/70 p-6 shadow-md">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="h-6 w-6 text-amber-600" />
+            <div>
+              <div className="text-lg font-bold text-amber-950">Hospital Reviewing Claim Details</div>
+              <p className="text-sm text-amber-800">Your hospital billing care team is currently adding updated documentation to your claim for automatic insurance re-submission.</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-3xl border border-sky-200 bg-sky-50/60 p-5 shadow-xs">
+          <div className="flex items-center gap-3 text-sky-900">
+            <Clock className="h-5 w-5 text-sky-600" />
+            <div className="text-sm font-semibold">Your claim is active and currently undergoing quality verification by {claim.department}.</div>
+          </div>
+        </div>
+      )}
+
+      {/* PATIENT AUTHORIZED CLAIM TRACKING PIPELINE (Patient-Friendly, Authorized Info Only) */}
+      <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <h2 className="text-xl font-bold text-slate-900">Your Claim Progression</h2>
+            <p className="text-xs text-slate-500 mt-0.5">Simple, authorized status milestones provided by {claim.department}.</p>
+          </div>
+          <span className="rounded-full bg-slate-100 px-4 py-1.5 text-xs font-bold text-slate-700">
+            Status: <span className="text-sky-700">{claim.status === 'Paid' ? 'Reimbursed & Paid' : claim.status}</span>
+          </span>
+        </div>
+
+        {/* Patient Tracking Pipeline Nodes */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
+          {PATIENT_STAGES.map((st, idx) => {
+            const isCompleted = idx < activeStepIdx;
+            const isCurrent = idx === activeStepIdx;
+            return (
+              <div key={st.key} className={`rounded-2xl p-4 border text-center transition ${
+                isCompleted
+                  ? 'border-emerald-200 bg-emerald-50/60 text-emerald-900'
+                  : isCurrent
+                  ? 'border-sky-300 bg-sky-50 text-sky-950 ring-2 ring-sky-200'
+                  : 'border-slate-100 bg-slate-50 text-slate-400'
+              }`}>
+                <div className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+                  isCompleted ? 'bg-emerald-600 text-white' : isCurrent ? 'bg-sky-600 text-white' : 'bg-slate-200 text-slate-500'
+                }`}>
+                  {isCompleted ? '✓' : idx + 1}
+                </div>
+                <div className="mt-2 text-xs font-bold truncate">{st.label}</div>
+                <div className="mt-0.5 text-[10px] text-slate-500">{isCompleted ? 'Done' : isCurrent ? 'Active' : 'Pending'}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Patient Authorized Info Cards (Simple Language) */}
+      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+          <div className="section-title">Claim Overview</div>
+          <div className="space-y-3 text-sm text-slate-600">
+            <p><span className="font-bold text-slate-900">Patient Name:</span> {claim.patient}</p>
+            <p><span className="font-bold text-slate-900">Claim Reference:</span> {claim.claimId}</p>
+            <p><span className="font-bold text-slate-900">Attending Doctor:</span> {claim.primaryPhysician}</p>
+            <p><span className="font-bold text-slate-900">Insurance Provider:</span> {claim.insurance}</p>
+            <p><span className="font-bold text-slate-900">Hospital / Facility:</span> {claim.department}</p>
+            <p><span className="font-bold text-slate-900">Admission Period:</span> {claim.admissionDate} to {claim.dischargeDate}</p>
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+          <div className="section-title">Payment & Coverage Summary</div>
+          <div className="space-y-3 text-sm text-slate-600">
+            <div className="flex justify-between rounded-xl bg-slate-50 p-3">
+              <span>Total Hospital Bill:</span>
+              <span className="font-bold text-slate-900">₹{Number(claim.billing?.grandTotal || claim.amount).toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between rounded-xl bg-emerald-50 p-3 text-emerald-900 font-semibold">
+              <span>Approved Insurance Coverage:</span>
+              <span className="font-extrabold">₹{Number(claim.billing?.insuranceCoverage || claim.amount * 0.9).toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between rounded-xl bg-slate-50 p-3">
+              <span>Estimated Patient Co-Pay:</span>
+              <span className="font-bold text-slate-900">₹{Number(claim.billing?.patientResponsibility || claim.amount * 0.1).toLocaleString()}</span>
+            </div>
+            <Link to="/patient/feedback" className="mt-4 inline-flex items-center justify-center w-full rounded-2xl bg-slate-900 px-5 py-3 text-sm font-bold text-white hover:bg-slate-800 transition shadow-sm">
+              Share Experience Feedback
+            </Link>
           </div>
         </div>
       </div>
