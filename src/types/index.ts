@@ -41,6 +41,17 @@ export type ValidationSeverity = 'Info' | 'Warning' | 'Critical';
 
 export type ValidationStatus = 'Passed' | 'Warning' | 'Failed';
 
+export interface DenialIntelligence {
+  confidence?: number;
+  rootCause?: string;
+  evidence?: string;
+  suggestedFix?: string;
+  affectedDocument?: string;
+  affectedCode?: string;
+  rationale?: string;
+  timestamp?: string;
+}
+
 export interface ClaimRecord {
   claimId: string;
   patient: string;
@@ -73,6 +84,7 @@ export interface ClaimRecord {
   aiReview: AIReviewResult;
   timeline: ClaimTimelineEntry[];
   activity: ClaimActivityEntry[];
+  denialIntelligence?: DenialIntelligence;
 }
 
 export interface ValidationIssue {
